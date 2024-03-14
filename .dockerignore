@@ -1,0 +1,19 @@
+# Fichiers de configuration et dossiers
+node_modules
+npm-debug.log
+.npm
+.git
+.gitignore
+.dockerignore
+README.md
+LICENSE
+.vscode
+.editorconfig
+.env.example
+.DS_Store
+
+# Dossiers spécifiques au projet
+build
+dist
+logs
+tmp

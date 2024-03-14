@@ -1,0 +1,26 @@
+# Stage 1: Installer les dépendances
+FROM node:20-alpine AS dependencies
+
+# Installation de curl pour installer pnpm
+RUN apk --no-cache add curl
+
+# Installation de pnpm
+RUN curl -sL https://unpkg.com/@pnpm/self-installer | node
+
+# Définition du répertoire de travail
+WORKDIR /app
+
+# Copie des fichiers de dépendances
+COPY package.json pnpm-lock.yaml ./
+
+# Installation de toutes les dépendances (production et développement)
+RUN pnpm install
+
+# Stage 2: Exécuter le serveur de développement
+FROM dependencies AS development
+
+# Copie de tous les fichiers du projet
+COPY . .
+
+# Exécution de la commande pour démarrer le serveur de développement
+CMD ["pnpm", "run", "dev"]
