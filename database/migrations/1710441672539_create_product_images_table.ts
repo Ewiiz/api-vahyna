@@ -6,7 +6,7 @@ export default class extends BaseSchema {
   async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
-      table.foreign('product_id').references('products.id').onDelete('CASCADE')
+      table.integer('product_id').references('products.id').onDelete('CASCADE')
       table.string('image_path').notNullable()
 
       table.timestamp('created_at')
