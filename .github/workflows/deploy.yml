@@ -23,6 +23,6 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
-            cd /srv/vahyna
+            cd /srv/vahyna/api-vahyna/
             docker pull ghcr.io/ewiiz/api-vahyna:latest
             docker-compose up --no-deps -d app

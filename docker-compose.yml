@@ -25,12 +25,10 @@ services:
       - '3335:3333'
     volumes:
       - uploads:/app/uploads
-    env_file:
-      - .env
     depends_on:
       db:
         condition: service_healthy
-    develop:
+    develop: #Il faut l'enlever pour la PROD
       watch:
         - action: sync
           path: .
