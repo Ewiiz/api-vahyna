@@ -46,12 +46,24 @@ export default class UserCartsController {
   async store({ auth, request, response }: HttpContext) {
     const user = auth.getUserOrFail()
     const { productId, quantity } = await request.validateUsing(addProductToCartValidator)
-    // Ajouter le produit au panier de l'utilisateur
-    await user.related('cart').create({ productId, quantity })
 
-    return response.created({
-      message: 'Le produit a été ajouté au panier avec succès',
-    })
+    // Vérifier si le produit est déjà dans le panier de l'utilisateur
+    const existingCartItem = await UserCart.query()
+      .where('userId', user.id)
+      .where('productId', productId)
+      .first()
+
+    if (existingCartItem) {
+      return response.conflict({
+        message: 'Le produit est déjà dans votre panier',
+      })
+    } else {
+      await user.related('cart').create({ productId, quantity })
+
+      return response.created({
+        message: 'Le produit a été ajouté au panier avec succès',
+      })
+    }
   }
 
   /**
