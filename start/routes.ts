@@ -12,6 +12,7 @@ import router from '@adonisjs/core/services/router'
 const AuthController = () => import('#controllers/auth_controller')
 const ProductsController = () => import('#controllers/products_controller')
 import { middleware } from '#start/kernel'
+const UserCartsController = () => import('#controllers/user_carts_controller')
 
 const ImagesController = () => import('#controllers/images_controller')
 
@@ -39,5 +40,12 @@ router
     |--------------------------------------------
     */
     router.get('uploads/products/:imageName', [ImagesController, 'getImagesForProducts'])
+
+    /*
+    |--------------------------------------------
+    |  CRUD du panier
+    |--------------------------------------------
+    */
+    router.resource('cart', UserCartsController).apiOnly()
   })
   .use(middleware.auth())

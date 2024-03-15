@@ -75,7 +75,7 @@ export default class ProductsController {
       await productToDelete.delete()
       return response.ok({ message: `Le produit '${productToDelete.title}' a bien été supprimé.` })
     } catch (error) {
-      return response.notFound({ message: "Le product demandé n'a pas été trouvé." })
+      return response.notFound({ message: "Le produit demandé n'a pas été trouvé." })
     }
   }
 
