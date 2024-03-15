@@ -5,6 +5,18 @@ export default class Product extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
 
+  @column()
+  declare title: string
+
+  @column()
+  declare details: string | null
+
+  @column()
+  declare price: string
+
+  @column()
+  declare coverImage: string
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
