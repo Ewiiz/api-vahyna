@@ -30,6 +30,10 @@ ARG APP_RELEASE
 ENV APP_RELEASE=${APP_RELEASE}
 ENV NODE_ENV=production
 ENV HOST=0.0.0.0
+ENV DB_HOST=${DB_HOST}
+ENV DB_PORT=${DB_PORT}
+ENV DB_USER=${DB_USER}
+ENV DB_DATABASE=${DB_DATABASE}
 WORKDIR /app
 COPY --from=production-deps /app/node_modules /app/node_modules
 COPY --from=build /app/build /app
