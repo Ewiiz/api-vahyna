@@ -12,6 +12,7 @@ import router from '@adonisjs/core/services/router'
 const AuthController = () => import('#controllers/auth_controller')
 const ProductsController = () => import('#controllers/products_controller')
 import { middleware } from '#start/kernel'
+
 const UserCartsController = () => import('#controllers/user_carts_controller')
 
 const ImagesController = () => import('#controllers/images_controller')
@@ -27,6 +28,13 @@ router.post('login', [AuthController, 'login'])
 
 router
   .group(() => {
+    /*
+    |--------------------------------------------
+    | Authentification session utilisateur
+    |--------------------------------------------
+    */
+    router.post('logout', [AuthController, 'logout'])
+    router.get('check', [AuthController, 'check'])
     /*
     |--------------------------------------------
     |  CRUD d'une template

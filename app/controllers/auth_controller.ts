@@ -30,4 +30,12 @@ export default class AuthController {
       })
     }
   }
+
+  async logout({ auth }: HttpContext) {
+    return await auth.use('web').logout()
+  }
+
+  async check({ auth, response }: HttpContext) {
+    return response.ok({ authenticated: auth.isAuthenticated })
+  }
 }
