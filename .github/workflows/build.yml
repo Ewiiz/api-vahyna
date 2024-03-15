@@ -1,0 +1,58 @@
+name: build
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  REGISTRY: ghcr.io #Registery
+  IMAGE_NAME: ewiiz/api-vahyna #Nom de l'image
+  IMAGE_TAG: 1.0.${{ github.run_number }}
+
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Login to GitHub Packages
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Prepare metadata
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: ${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=ref,event=tag
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          push: true #${{ github.ref_type != 'pull_request' }}
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            TZ=${{ secrets.TZ }}
+            PORT=${{ secrets.PORT }}
+            HOST=${{ secrets.HOST }}
+            LOG_LEVEL=${{ secrets.LOG_LEVEL }}
+            APP_KEY=${{ secrets.APP_KEY }}
+            DB_HOST=${{ secrets.DB_HOST }}
+            DB_PORT=${{ secrets.DB_PORT }}
+            DB_USER=${{ secrets.DB_USER }}
+            DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+            DB_DATABASE=${{ secrets.DB_DATABASE }}
+            SESSION_DRIVER=${{ secrets.SESSION_DRIVER }}

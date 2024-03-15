@@ -1,0 +1,28 @@
+name: deploy
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  deploy:
+    if: github.ref_type == 'tag'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      #      - name: Login to GitHub Container Registry
+      #        run: echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Deploy the new image
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          script: |
+            cd /srv/vahyna
+            docker pull ghcr.io/ewiiz/api-vahyna:latest
+            docker-compose up --no-deps -d app
