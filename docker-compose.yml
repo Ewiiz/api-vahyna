@@ -23,30 +23,32 @@ services:
     restart: always
     ports:
       - '3335:3333'
+    env_file:
+      - .env
     volumes:
       - uploads:/app/uploads
     depends_on:
       db:
         condition: service_healthy
-    develop: #Il faut l'enlever pour la PROD
-      watch:
-        - action: sync
-          path: .
-          target: /app
-          ignore:
-            - node_modules/
-            - .git/
-            - .vscode/       # Exclure les fichiers spécifiques à Visual Studio Code
-            - .env.example  # Exclure les fichiers d'exemple de configuration
-            - .DS_Store     # Exclure les fichiers de système macOS
-            - build/        # Exclure les fichiers de build
-            - dist/         # Exclure les fichiers de distribution
-            - logs/         # Exclure les fichiers de logs
-            - tmp/          # Exclure les fichiers temporaires
-        - action: rebuild
-          path: package.json
-          target: /app
-          # Si votre application nécessite un rebuild après la modification de package.json
+          #    develop: #Il faut l'enlever pour la PROD
+          #      watch:
+          #        - action: sync
+          #          path: .
+          #          target: /app
+          #          ignore:
+          #            - node_modules/
+          #            - .git/
+          #            - .vscode/       # Exclure les fichiers spécifiques à Visual Studio Code
+          #            - .env.example  # Exclure les fichiers d'exemple de configuration
+          #            - .DS_Store     # Exclure les fichiers de système macOS
+          #            - build/        # Exclure les fichiers de build
+          #            - dist/         # Exclure les fichiers de distribution
+          #            - logs/         # Exclure les fichiers de logs
+          #            - tmp/          # Exclure les fichiers temporaires
+          #        - action: rebuild
+          #          path: package.json
+        #          target: /app
+        # Si votre application nécessite un rebuild après la modification de package.json
 volumes:
   postgres-data:
   uploads:
