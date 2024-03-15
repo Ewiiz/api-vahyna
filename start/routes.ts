@@ -8,9 +8,12 @@
 */
 
 import router from '@adonisjs/core/services/router'
-import AuthController from "#controllers/auth_controller";
-import ProductsController from "#controllers/products_controller";
-import {middleware} from "#start/kernel";
+
+const AuthController = () => import('#controllers/auth_controller')
+const ProductsController = () => import('#controllers/products_controller')
+import { middleware } from '#start/kernel'
+
+const ImagesController = () => import('#controllers/images_controller')
 
 router.get('/', async () => {
   return {
@@ -21,13 +24,20 @@ router.get('/', async () => {
 router.post('register', [AuthController, 'register'])
 router.post('login', [AuthController, 'login'])
 
+router
+  .group(() => {
+    /*
+    |--------------------------------------------
+    |  CRUD d'une template
+    |--------------------------------------------
+    */
+    router.resource('products', ProductsController).apiOnly()
 
-router.group(() => {
-  /*
-  |--------------------------------------------------------------------------
-  |  CRUD d'une template
-  |--------------------------------------------------------------------------
-  */
-  router.resource('products', ProductsController).apiOnly()
-
-}).use(middleware.auth())
+    /*
+    |--------------------------------------------
+    |  Pour renvoyé les images d'un produit
+    |--------------------------------------------
+    */
+    router.get('uploads/products/:imageName', [ImagesController, 'getImagesForProducts'])
+  })
+  .use(middleware.auth())

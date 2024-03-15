@@ -17,7 +17,7 @@ export default await Env.create(new URL('../', import.meta.url), {
   APP_KEY: Env.schema.string(),
   HOST: Env.schema.string({ format: 'host' }),
   LOG_LEVEL: Env.schema.string(),
-
+  URL_API: Env.schema.string(),
   /*
   |----------------------------------------------------------
   | Variables for configuring database connection
@@ -34,5 +34,5 @@ export default await Env.create(new URL('../', import.meta.url), {
   | Variables for configuring session package
   |----------------------------------------------------------
   */
-  SESSION_DRIVER: Env.schema.enum(['cookie', 'memory'] as const)
+  SESSION_DRIVER: Env.schema.enum(['cookie', 'memory'] as const),
 })
