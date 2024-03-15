@@ -23,6 +23,7 @@ export default class UserCartsController {
         let total: number = price * quantity // Calculer le total du produit
         total = Number(total.toFixed(2))
         return {
+          productId: product.id,
           name: product.title,
           coverImage: product.getCoverImage,
           price: product.price,
