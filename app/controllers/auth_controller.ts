@@ -15,7 +15,7 @@ export default class AuthController {
     try {
       const user: User = await User.verifyCredentials(email, password)
       await auth.use('web').login(user)
-      return response.ok({ message: "Connexion réussie"})
+      return response.ok({ message: "Connexion réussie", user})
     } catch (error) {
       if (error instanceof authErrors.E_INVALID_CREDENTIALS) {
         return response.status(400).json({ message: "L'adresse e-mail ou le mot de passe est incorrect. Veuillez réessayer."})
