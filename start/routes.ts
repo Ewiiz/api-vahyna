@@ -46,13 +46,6 @@ router
 
     /*
     |--------------------------------------------
-    |  Pour renvoyé les images d'un produit
-    |--------------------------------------------
-    */
-    router.get('uploads/products/:imageName', [ImagesController, 'getImagesForProducts'])
-
-    /*
-    |--------------------------------------------
     |  CRUD du panier
     |--------------------------------------------
     */
@@ -67,3 +60,10 @@ router
 */
 router.get('/products/', [ProductsController, 'index'])
 router.get('/products/:id', [ProductsController, 'show'])
+
+/*
+|--------------------------------------------
+|  Pour renvoyé les images d'un produit
+|--------------------------------------------
+*/
+router.get('uploads/products/:imageName', [ImagesController, 'getImagesForProducts'])
