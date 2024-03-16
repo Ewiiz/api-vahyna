@@ -45,10 +45,8 @@ jobs:
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            TZ=${{ secrets.TZ }}
             PORT=${{ secrets.PORT }}
             HOST=${{ secrets.HOST }}
-            LOG_LEVEL=${{ secrets.LOG_LEVEL }}
             APP_KEY=${{ secrets.APP_KEY }}
             DB_HOST=${{ secrets.DB_HOST }}
             DB_PORT=${{ secrets.DB_PORT }}
