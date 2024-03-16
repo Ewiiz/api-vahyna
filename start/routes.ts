@@ -25,6 +25,7 @@ router.get('/', async () => {
 
 router.post('register', [AuthController, 'register'])
 router.post('login', [AuthController, 'login'])
+router.get('check', [AuthController, 'check'])
 
 router
   .group(() => {
@@ -34,20 +35,14 @@ router
     |--------------------------------------------
     */
     router.post('logout', [AuthController, 'logout'])
-    router.get('check', [AuthController, 'check'])
     /*
     |--------------------------------------------
     |  CRUD d'une template
     |--------------------------------------------
     */
-    router.resource('products', ProductsController).apiOnly()
-
-    /*
-    |--------------------------------------------
-    |  Pour renvoyé les images d'un produit
-    |--------------------------------------------
-    */
-    router.get('uploads/products/:imageName', [ImagesController, 'getImagesForProducts'])
+    router.put('/products/:id', [ProductsController, 'update'])
+    router.patch('/products/:id', [ProductsController, 'update'])
+    router.delete('/products/:id', [ProductsController, 'destroy'])
 
     /*
     |--------------------------------------------
@@ -57,3 +52,18 @@ router
     router.resource('cart', UserCartsController).apiOnly()
   })
   .use(middleware.auth())
+
+/*
+|--------------------------------------------
+|  Renvoie des produits pour les clients
+|--------------------------------------------
+*/
+router.get('/products/', [ProductsController, 'index'])
+router.get('/products/:id', [ProductsController, 'show'])
+
+/*
+|--------------------------------------------
+|  Pour renvoyé les images d'un produit
+|--------------------------------------------
+*/
+router.get('uploads/products/:imageName', [ImagesController, 'getImagesForProducts'])
