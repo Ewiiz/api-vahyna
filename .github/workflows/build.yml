@@ -53,4 +53,5 @@ jobs:
             DB_USER=${{ secrets.DB_USER }}
             DB_PASSWORD=${{ secrets.DB_PASSWORD }}
             DB_DATABASE=${{ secrets.DB_DATABASE }}
+            URL_API=${{ secrets.URL_API }}
             SESSION_DRIVER=${{ secrets.SESSION_DRIVER }}

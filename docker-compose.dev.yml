@@ -1,15 +1,4 @@
-version: '3.8'
 services:
-  app:
-    image: ghcr.io/ewiiz/api-vahyna:latest
-    restart: always
-    ports:
-      - '3335:3333'
-    volumes:
-      - uploads:/app/uploads
-    depends_on:
-      db:
-        condition: service_healthy
   db:
     image: postgres:latest
     restart: always
@@ -26,6 +15,19 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - '3335:3333'
+    volumes:
+      - uploads:/app/uploads
+    depends_on:
+      db:
+        condition: service_healthy
 volumes:
   postgres-data:
   uploads:
