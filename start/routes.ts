@@ -40,7 +40,9 @@ router
     |  CRUD d'une template
     |--------------------------------------------
     */
-    router.resource('products', ProductsController).apiOnly()
+    router.put('/products/:id', [ProductsController, 'update'])
+    router.patch('/products/:id', [ProductsController, 'update'])
+    router.delete('/products/:id', [ProductsController, 'destroy'])
 
     /*
     |--------------------------------------------
@@ -57,3 +59,11 @@ router
     router.resource('cart', UserCartsController).apiOnly()
   })
   .use(middleware.auth())
+
+/*
+|--------------------------------------------
+|  Renvoie des produits pour les clients
+|--------------------------------------------
+*/
+router.get('/products/', [ProductsController, 'index'])
+router.get('/products/:id', [ProductsController, 'show'])
