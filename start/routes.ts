@@ -25,7 +25,6 @@ router.get('/', async () => {
 
 router.post('register', [AuthController, 'register'])
 router.post('login', [AuthController, 'login'])
-router.get('check', [AuthController, 'check'])
 
 router
   .group(() => {
@@ -35,6 +34,7 @@ router
     |--------------------------------------------
     */
     router.post('logout', [AuthController, 'logout'])
+    router.get('check', [AuthController, 'check'])
     /*
     |--------------------------------------------
     |  CRUD d'une template
