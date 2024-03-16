@@ -19,7 +19,7 @@ const ImagesController = () => import('#controllers/images_controller')
 
 router.get('/', async () => {
   return {
-    CODE: 'HIVE',
+    API: 'CODE-HIVE',
   }
 })
 

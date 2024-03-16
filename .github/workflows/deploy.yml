@@ -9,7 +9,7 @@ jobs:
     if: github.ref_type == 'tag'
     runs-on: ubuntu-latest
     env:
-      SERVICES: db app
+      SERVICES: app #db
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -22,6 +22,6 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
-            cd /srv/vahyna/api-test/
+            cd /srv/vahyna/api-vahyna/
             docker pull ghcr.io/ewiiz/api-vahyna:latest
             docker-compose up -d $SERVICES
