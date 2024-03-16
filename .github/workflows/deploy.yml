@@ -8,12 +8,11 @@ jobs:
   deploy:
     if: github.ref_type == 'tag'
     runs-on: ubuntu-latest
+    env:
+      SERVICES: db app
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      #      - name: Login to GitHub Container Registry
-      #        run: echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Deploy the new image
         uses: appleboy/ssh-action@v1.0.3
@@ -23,6 +22,6 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
-            cd /srv/vahyna/api-vahyna/
+            cd /srv/vahyna/api-test/
             docker pull ghcr.io/ewiiz/api-vahyna:latest
-            docker-compose up --no-deps -d app
+            docker-compose up -d $SERVICES
