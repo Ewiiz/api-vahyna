@@ -40,7 +40,7 @@ router
     |  CRUD d'une template
     |--------------------------------------------
     */
-    router.post('/products/:id', [ProductsController, 'store'])
+    router.post('/products', [ProductsController, 'store'])
     router.put('/products/:id', [ProductsController, 'update'])
     router.patch('/products/:id', [ProductsController, 'update'])
     router.delete('/products/:id', [ProductsController, 'destroy'])
