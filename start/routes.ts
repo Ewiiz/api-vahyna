@@ -64,7 +64,7 @@ router.get('/products/:id', [ProductsController, 'show'])
 
 /*
 |--------------------------------------------
-|  Pour renvoyé les images de tout les produits
+|  Pour renvoyer les images de tous les produits
 |--------------------------------------------
 */
 router.get('uploads/products/:imageName', [ImagesController, 'getImagesForProducts'])

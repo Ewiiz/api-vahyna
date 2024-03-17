@@ -3,6 +3,15 @@ import Product from '#models/product'
 import { addProductToCartValidator } from '#validators/user_cart'
 import UserCart from '#models/user_cart'
 
+type ProductInfo = {
+  productId: number
+  name?: string
+  coverImage?: string
+  price: string
+  quantity: number
+  total: number
+}
+
 export default class UserCartsController {
   /**
    * Display a list of resource
@@ -10,31 +19,8 @@ export default class UserCartsController {
   async index({ auth, response }: HttpContext) {
     const user = auth.getUserOrFail()
 
-    // Récupérer les produits dans le panier de l'utilisateur
-    const productInsideCart = await UserCart.query().where('userId', user.id).exec()
-
-    // Construire un tableau avec les informations requises pour chaque produit
-    const productsInfo = await Promise.all(
-      productInsideCart.map(async (item: UserCart) => {
-        const productId: number = item.productId // Accès à la propriété productId
-        const product: Product = await Product.findOrFail(productId)
-        const quantity: number = item.quantity // Accès à la propriété quantity
-        const price: number = Number.parseFloat(product.price)
-        let total: number = price * quantity // Calculer le total du produit
-        total = Number(total.toFixed(2))
-        return {
-          productId: product.id,
-          name: product.title,
-          coverImage: product.getCoverImage,
-          price: product.price,
-          quantity,
-          total,
-        }
-      })
-    )
-
-    let totalGeneral: number = productsInfo.reduce((acc, curr) => acc + curr.total, 0)
-    totalGeneral = Number(totalGeneral.toFixed(2)) // Limiter le total général à deux chiffres après la virgule
+    const userCartItems = await this.getProductsInCart(user.id)
+    const { productsInfo, totalGeneral } = await this.calculateCart(userCartItems, true, false)
 
     // Retourner le tableau des informations sur les produits
     return response.ok({ productsInfo, totalGeneral })
@@ -99,5 +85,73 @@ export default class UserCartsController {
         message: "Le produit demandé n'a pas été trouvé dans votre panier.",
       })
     }
+  }
+
+  getProductInfo({
+    product,
+    quantity,
+    total,
+    withName = false,
+    withCoverImage = false,
+  }: {
+    product: Product
+    quantity: number
+    total: number
+    withName?: boolean
+    withCoverImage?: boolean
+  }): ProductInfo {
+    const productInfo: ProductInfo = {
+      productId: product.id,
+      price: product.price,
+      quantity,
+      total,
+    }
+
+    if (withName) {
+      productInfo.name = product.title
+    }
+
+    if (withCoverImage) {
+      productInfo.coverImage = product.getCoverImage
+    }
+
+    return productInfo
+  }
+
+  async getProductsInCart(userId: number): Promise<UserCart[]> {
+    return await UserCart.query().where('userId', userId).exec()
+  }
+
+  async calculateCart(
+    userCartItems: UserCart[],
+    withName = false,
+    withCoverImage = false
+  ): Promise<{
+    productsInfo: ProductInfo[]
+    totalGeneral: number
+  }> {
+    // Construire un tableau avec les informations requises pour chaque produit
+    const productsInfo = await Promise.all(
+      userCartItems.map(async (item: UserCart) => {
+        const productId: number = item.productId // Accès à la propriété productId
+        const product: Product = await Product.findOrFail(productId)
+        const quantity: number = item.quantity // Accès à la propriété quantity
+        const price: number = Number.parseFloat(product.price)
+        let total: number = price * quantity // Calculer le total du produit
+        total = Number(total.toFixed(2))
+        return this.getProductInfo({
+          product,
+          quantity,
+          total,
+          withName,
+          withCoverImage,
+        })
+      })
+    )
+
+    let totalGeneral: number = productsInfo.reduce((acc, curr) => acc + curr.total, 0)
+    totalGeneral = Number(totalGeneral.toFixed(2)) // Limiter le total général à deux chiffres après la virgule
+
+    return { productsInfo, totalGeneral }
   }
 }
