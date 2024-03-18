@@ -15,9 +15,7 @@ export default class AdminMiddleware {
     }
     // Vérifier si l'utilisateur est un administrateur
     if (!user.isAdmin) {
-      const data = { firstname: user.firstname, admin: user.isAdmin }
       return ctx.response.forbidden({
-        data,
         message: "Vous n'avez pas les autorisations suffisantes pour accéder à cette ressource.",
       })
     }
