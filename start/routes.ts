@@ -37,13 +37,17 @@ router
     router.get('check', [AuthController, 'check'])
     /*
     |--------------------------------------------
-    |  CRUD d'une template
+    |  CRUD d'une template partie ADMIN
     |--------------------------------------------
     */
-    router.post('/products', [ProductsController, 'store'])
-    router.put('/products/:id', [ProductsController, 'update'])
-    router.patch('/products/:id', [ProductsController, 'update'])
-    router.delete('/products/:id', [ProductsController, 'destroy'])
+    router
+      .group(() => {
+        router.post('/products', [ProductsController, 'store'])
+        router.put('/products/:id', [ProductsController, 'update'])
+        router.patch('/products/:id', [ProductsController, 'update'])
+        router.delete('/products/:id', [ProductsController, 'destroy'])
+      })
+      .use(middleware.admin())
 
     /*
     |--------------------------------------------
