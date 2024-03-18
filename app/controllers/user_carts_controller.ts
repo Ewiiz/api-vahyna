@@ -1,6 +1,6 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Product from '#models/product'
-import { addProductToCartValidator } from '#validators/user_cart'
+import { addProductToCartValidator, updateProductInCartValidator } from '#validators/user_cart'
 import UserCart from '#models/user_cart'
 
 type ProductInfo = {
@@ -55,7 +55,43 @@ export default class UserCartsController {
   /**
    * Handle form submission for the edit action
    */
-  async update({ params, request }: HttpContext) {}
+  async update({ auth, params, request, response }: HttpContext) {
+    const userId = auth.getUserOrFail().id
+    const productId = Number(params.id)
+    if (Number.isNaN(productId)) {
+      return response.badRequest({
+        message: "L'identifiant du produit est invalide.",
+      })
+    }
+    const { quantity } = await request.validateUsing(updateProductInCartValidator)
+
+    try {
+      const cartItem = await UserCart.query()
+        .where('userId', userId)
+        .andWhere('productId', productId)
+        .firstOrFail()
+
+      cartItem.quantity = quantity
+      await cartItem.save()
+
+      const userCartItems = await this.getProductsInCart(userId)
+      const { productsInfo, totalGeneral } = await this.calculateCart(userCartItems, false, false)
+
+      const updatedProductInfo = productsInfo.find((product) => product.productId === productId)
+
+      if (updatedProductInfo) {
+        return response.ok({ updatedProductInfo, totalGeneral })
+      } else {
+        return response.notFound({
+          message: "Le produit demandé n'a pas été trouvé dans votre panier.",
+        })
+      }
+    } catch (error) {
+      return response.notFound({
+        message: "Le produit demandé n'a pas été trouvé dans votre panier.",
+      })
+    }
+  }
 
   /**
    * Delete record

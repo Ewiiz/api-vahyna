@@ -21,3 +21,13 @@ addProductToCartValidator.messagesProvider = new SimpleMessagesProvider({
   'quantity.number': 'Veuillez entrer un nombre valide.',
   'quantity.min': "La quantité doit être d'au moins 1.",
 })
+
+export const updateProductInCartValidator = vine.compile(
+  vine.object({
+    quantity: vine.number().min(1),
+  })
+)
+
+updateProductInCartValidator.messagesProvider = new SimpleMessagesProvider({
+  'quantity.number': 'Veuillez entrer un nombre valide.',
+})
