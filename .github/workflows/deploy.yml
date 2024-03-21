@@ -14,6 +14,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Deploy the new image
         uses: appleboy/ssh-action@v1.0.3
         with:
