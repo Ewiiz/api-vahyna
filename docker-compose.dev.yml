@@ -33,16 +33,6 @@ services:
         - action: sync
           path: .
           target: /app
-          ignore:
-            - node_modules/
-            - .git/
-            - .vscode/       # Exclure les fichiers spécifiques à Visual Studio Code
-            - .env.example  # Exclure les fichiers d'exemple de configuration
-            - .DS_Store     # Exclure les fichiers de système macOS
-            - build/        # Exclure les fichiers de build
-            - dist/         # Exclure les fichiers de distribution
-            - logs/         # Exclure les fichiers de logs
-            - tmp/          # Exclure les fichiers temporaires
         - action: rebuild
           path: package.json
           target: /app
