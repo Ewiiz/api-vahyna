@@ -4,7 +4,7 @@ services:
     image: ghcr.io/ewiiz/api-vahyna:latest
     restart: always
     ports:
-      - '3335:3333'
+      - '127.0.0.1:3335:3333'
     volumes:
       - uploads:/app/uploads
     depends_on:
