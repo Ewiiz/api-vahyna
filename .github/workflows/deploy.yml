@@ -34,4 +34,4 @@ jobs:
           script: |
             cd /srv/vahyna/api-vahyna/
             docker pull ghcr.io/ewiiz/api-vahyna:latest
-            docker-compose up -d $SERVICES
+            docker-compose up -d --no-deps $SERVICES
