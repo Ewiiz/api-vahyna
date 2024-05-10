@@ -18,6 +18,7 @@ const UserCartsController = () => import('#controllers/user_carts_controller')
 const ImagesController = () => import('#controllers/images_controller')
 
 router.get('/', async () => {
+  console.log('je suuis la')
   return {
     API_BY: 'CODE-HIVE !!!',
   }
