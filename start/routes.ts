@@ -19,7 +19,7 @@ const ImagesController = () => import('#controllers/images_controller')
 
 router.get('/', async () => {
   return {
-    API_BY: 'CODE-HIVE',
+    API_BY: 'CODE-HIVE !!!',
   }
 })
 
@@ -43,8 +43,8 @@ router
     router
       .group(() => {
         router.post('/products', [ProductsController, 'store'])
-        router.put('/products/:id', [ProductsController, 'update'])
-        router.patch('/products/:id', [ProductsController, 'update'])
+        // router.put('/products/:id', [ProductsController, 'update'])
+        // router.patch('/products/:id', [ProductsController, 'update'])
         router.delete('/products/:id', [ProductsController, 'destroy'])
       })
       .use(middleware.admin())
